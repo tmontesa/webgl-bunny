@@ -1,0 +1,21 @@
+* {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    color: #222;
+}
+
+body {
+    display: flex;
+    background: #ffe;
+}
+
+main {
+    display: inline-block;
+    margin: auto;
+    text-align: center;
+}
+
+canvas {
+    border: 1px dashed #aaa;
+    margin-bottom: 30px;
+    border-radius: 10px;
+}
