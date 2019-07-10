@@ -1,3 +1,13 @@
+function Bunny() {
+	this.translateX = 0;
+	this.translateY = 0;
+	this.translateZ = 0;
+	this.rotateX = 0;
+	this.rotateY = 0;
+	this.translateSpeed = 1;
+	this.rotateSpeed = .5;
+}
+
 function get_bunny_vertices() {
     return [vec3(-1.537658,1.170480,0.746700),
 			vec3(0.347060,-0.251982,0.860968),

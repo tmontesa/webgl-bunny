@@ -12,7 +12,7 @@ var mouse = {
 	X:	0,
 	Y: 	0,
 	ABS_X: 0,
-	ABS_Y: 0,
+	ABS_Y: 0
 };
 
 var key = {
