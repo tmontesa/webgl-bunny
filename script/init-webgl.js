@@ -7,14 +7,10 @@
 var canvas, gl;
 
 // Vertices and indices of ALL objects that will be drawn on screen.
-var vertices = [];
-var indices = [];
-var vertices_sent = [];
-var indices_sent = [];
 
-// VertexBufferObject and IndexBufferObject for rendering.
-var VBO;
-var IBO;
+var normal_faces = [];
+var normal_vertices = [];
+var normal_vertices_sent = [];
 
 // Matrices for world, view, and projection, and their uniform locations in the shader. 
 // (Initially set to indentity.)
@@ -46,11 +42,11 @@ function initialize() {
 
     
     // Load vertices and indices.
-    vertices = get_bunny_vertices();
-    indices = get_bunny_indices();
+    vertices = mesh_bunny.vertices;
+    indices = mesh_bunny.indices;
 
-    // Fix indices table cause it's offset
-    for (var i = 0; i < indices.length; i++){
+    
+    for (var i = 0; i < indices.length; i++){ // Fix indices table cause it's offset
         for (var j = 0; j < indices[i].length; j++){
             indices[i][j] -= 1;
         }
@@ -59,16 +55,27 @@ function initialize() {
     vertices_sent = flatten(vertices);
     indices_sent = new Uint16Array(flatten(indices));
 
-    // Create a vertex & index buffer object to bind vertices & indices to, and buffer.
-    VBO = gl.createBuffer();
+    // Calculate normals.
+    normal_faces = calculate_face_normals(indices, vertices);
+    normal_vertices = calculate_vertex_normals(indices, vertices, normal_faces);
+
+    normal_vertices_sent = new Float32Array(flatten(normal_vertices));
+
+    // Create a vertex, faces (index), and normal buffer objects.
+    var VBO = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, VBO);
     gl.bufferData(gl.ARRAY_BUFFER, vertices_sent, gl.STATIC_DRAW);
     
-    IBO = gl.createBuffer();
+    var IBO = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, IBO);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices_sent, gl.STATIC_DRAW);
 
+    var NBO = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, NBO);
+    gl.bufferData(gl.ARRAY_BUFFER, normal_vertices_sent, gl.STATIC_DRAW);
+
     // Get position attribute location, and bind the buffer to that attribute.
+    gl.bindBuffer(gl.ARRAY_BUFFER, VBO);
     var positionAttribLocation = gl.getAttribLocation(program, "vPosition");
     gl.vertexAttribPointer(
         positionAttribLocation,             // Attribute location
@@ -78,9 +85,20 @@ function initialize() {
         0, // Size of each vertex
         0                                   // Offset of the specific attribute
     );
-
-    // Enable attributes.
     gl.enableVertexAttribArray(positionAttribLocation);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, NBO);
+    var normalAttribLocation = gl.getAttribLocation(program, "vNormal");
+    gl.vertexAttribPointer(
+        normalAttribLocation,             // Attribute location
+        3,                                  // Number of elements per attribute
+        gl.FLOAT,                           // Data type of element
+        gl.TRUE,
+        0, // Size of each vertex
+        0                                   // Offset of the specific attribute
+    );
+    gl.enableVertexAttribArray(normalAttribLocation);
+
 
     // Get uniform matrices from vertex shader, and set initial values.
     mWorldUniformLocation = gl.getUniformLocation(program, 'mWorld');
@@ -107,8 +125,12 @@ function initialize() {
 
     // Start game loop.
     gl.useProgram(program);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
 
+    gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
+    gl.frontFace(gl.CCW);
+    gl.cullFace(gl.BACK);
     
     setInterval(game_loop, 20);
 }
