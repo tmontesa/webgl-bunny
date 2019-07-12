@@ -20,7 +20,7 @@ function game_update_translate() {
         if (LMBReleased) {
             LMBReleased = false;
         } else {
-            bunny.translateX = -bunny.translateSpeed * ((mouse.ABS_X - LMBLastPosX) / 100);
+            bunny.translateX = bunny.translateSpeed * ((mouse.ABS_X - LMBLastPosX) / 100);
             bunny.translateY = -bunny.translateSpeed * ((mouse.ABS_Y - LMBLastPosY) / 100);
         }
 
@@ -42,8 +42,8 @@ function game_update_rotate() {
         if (RMBReleased) {
             RMBReleased = false;
         } else {
-            bunny.rotateX = -bunny.rotateSpeed * (mouse.ABS_X - RMBLastPosX);
-            bunny.rotateY = -bunny.rotateSpeed * (mouse.ABS_Y - RMBLastPosY);
+            bunny.rotateX = bunny.rotateSpeed * (mouse.ABS_X - RMBLastPosX);
+            bunny.rotateY = bunny.rotateSpeed * (mouse.ABS_Y - RMBLastPosY);
         }
 
         RMBLastPosX = mouse.ABS_X;

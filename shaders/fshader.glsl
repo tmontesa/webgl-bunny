@@ -1,25 +1,50 @@
+//
+// FRAGMENT SHADER
+//
+
 precision mediump float;
 
 struct PointLight {
     vec4 position;
-    vec4 ambient;
     vec4 diffuse;
     vec4 specular;
 };
 
-varying vec3 fNormal;
-
+uniform vec4 fColor;
+uniform vec4 ambientIntensity;
 uniform PointLight pointlight;
+
+varying vec3 fNormal;
+varying vec3 L;
+varying vec3 V;
+varying vec3 R;
 
 void main() {
 
-    vec3 ambientLightIntensity = vec3(0.1, 0.1, 0.2);
-    vec3 sunlightLightIntensity = vec3(1.0, 1.0, 1.0);
-    vec3 sunlightLightDirection = normalize(vec3(1.0, 4.0, 0.0));
+    float diffuseConst = .25;
+    float specularConst = 2.0;
+    float shinyConst = 2.5;
+   
+    vec3 diffuseEffect = diffuseConst * dot(normalize(L), normalize(fNormal)) * pointlight.diffuse.rgb;
+    vec3 specularEffect = specularConst * pow(dot(normalize(R), normalize(V)), shinyConst) * pointlight.specular.rgb;
 
-    vec4 color = vec4(1.0, 0.7, 0.0, 1.0);
+    vec3 intensity = ambientIntensity.rgb + diffuseEffect + specularEffect;
 
-    vec3 lightIntensity = ambientLightIntensity + sunlightLightIntensity * max(dot(fNormal, sunlightLightDirection), 0.0);
-
-    gl_FragColor = vec4(color.rgb * lightIntensity, color.a);
+    gl_FragColor = vec4(fColor.rgb * intensity, fColor.a);
 }
+
+
+/*
+
+int ambientConst, diffuseConst, specularConst, shinyConst;
+
+// Independent
+vec4 ambientEffect  = ambientConst  * pointlight.ambient;
+
+// For each light
+vec4 diffuseEffect  = diffuseConst  *  (dot(normalize(L), normalize(N))               * pointlight.diffuse;
+vec4 specularEffect = specularConst * ((dot(normalize(R), normalize(V)) ^ shinyConst) * pointlight.specular;
+
+vec4 intensity = ambientEffect + diffuseEffect + specularEffect;
+
+*/

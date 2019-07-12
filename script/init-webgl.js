@@ -21,6 +21,18 @@ var mWorld = mat4();
 var mView = mat4();
 var mProj = mat4();
 
+// Lighting.
+var ambientUniformLocation;
+var pointlightPositionUniformLocation;
+var pointlightDiffuseUniformLocation;
+var pointlightSpecularUniformLocation;
+var colorUniformLocation;
+
+var ambient;
+var pointlight;
+var fColor;
+
+
 function initialize() {
     console.log("Initializing...")
 
@@ -107,12 +119,12 @@ function initialize() {
 
     mWorld = mat4(); // No world transformations initially, so set to identity.
     mView = lookAt(
-        vec3(0.0, 0.0, -10.0), // Eye
+        vec3(0.0, 0.0, 8.0), // Eye
         vec3(0.0, 0.0, 0.0), // At
         vec3(0.0, 1.0, 0.0) // Up
     );
     mProj = perspective(
-        45, // FOVy
+        45, // FOV-Y
         1, // Aspect (set to 1 since viewing on a square canvas)
         0.1, // Near
         1000 // Far
@@ -122,6 +134,31 @@ function initialize() {
     gl.uniformMatrix4fv(mViewUniformLocation, gl.FALSE, flatten(mView));
     gl.uniformMatrix4fv(mProjUniformLocation, gl.FALSE, flatten(mProj));
 
+    // Intialize lighting.
+
+    ambientUniformLocation = gl.getUniformLocation(program, 'ambientIntensity');
+    pointlightPositionUniformLocation = gl.getUniformLocation(program, 'pointlight.position');
+    pointlightDiffuseUniformLocation = gl.getUniformLocation(program, 'pointlight.diffuse');
+    pointlightSpecularUniformLocation = gl.getUniformLocation(program, 'pointlight.specular');
+    colorUniformLocation = gl.getUniformLocation(program, 'fColor');
+
+    ambient = new AmbientLight(
+        vec4(0.15, 0.15, 0.95, 1.0) // Ambient
+    );
+
+    pointlight = new PointLight(
+        vec4(5.0, 5.0, 5.0, 1.0),   // Position
+        vec4(1.0, 1.0, 1.0, 1.0),   // Diffuse
+        vec4(1.0, 1.0, 1.0, 1.0)    // Specular
+    );
+
+    fColor = vec4(1.0, 0.7, 0.0, 1.0);
+    
+    gl.uniform4fv(ambientUniformLocation, new Float32Array(ambient.ambient));
+    gl.uniform4fv(pointlightPositionUniformLocation, new Float32Array(pointlight.position));
+    gl.uniform4fv(pointlightDiffuseUniformLocation, new Float32Array(pointlight.diffuse));
+    gl.uniform4fv(pointlightSpecularUniformLocation, new Float32Array(pointlight.specular));
+    gl.uniform4fv(colorUniformLocation, new Float32Array(fColor));
 
     // Start game loop.
     gl.useProgram(program);
