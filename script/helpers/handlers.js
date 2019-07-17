@@ -28,7 +28,8 @@ var key = {
 	NUM_2:		false,
 	NUM_3:		false,
 	NUM_4:		false,
-	R:			false
+	R:			false,
+	P:			false
 };
 
 function handlerMousePosition(e) {
@@ -111,6 +112,9 @@ function handlerKeyDown(e) {
 		case 82:
 			key.R		= true;
 			break;
+		case 80:
+			key.P		= true;
+			break;
         default:
             break;
     }
@@ -156,6 +160,9 @@ function handlerKeyUp(e) {
 			break;
 		case 82:
 			key.R		= false;
+			break;
+		case 80:
+			key.P		= false;
 			break;
         default:
             break;

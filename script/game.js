@@ -14,6 +14,7 @@ document.addEventListener("mousemove", handlerMousePosition, false);
 
 // New objects.
 var bunny = new Bunny();
+var PLRotation = true;
 
 
 //
@@ -24,12 +25,17 @@ function reset() {
     mWorld = mat4();
 }
 
+function togglePLRotation() {
+    PLRotation = !PLRotation;
+}
+
 //
 // Game Loop
 //
 
 function game_loop() {
     if (key.R) { reset(); }
+    if (key.P) { togglePLRotation(); }
     game_update();
     game_render();
 }
