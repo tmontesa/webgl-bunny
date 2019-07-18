@@ -1,6 +1,12 @@
-// Fragment color.
+//
+// init/color.js
+// =========
+// Contains global varaibles, and initialization for the mesh fragment colors (bunny & lights).
+//
+
+
 var colorUniformLocation;
-var fColor = vec4(1.0, 0.7, 0.0, 1.0);
+var fColor = vec4(	218 / 256,165 / 256,32 / 256, 1.0);
 var PLColor = vec4(1.0, 0.0, 0.0, 0.5);
 var SLColor = vec4(0.0, 0.0, 1.0, 0.5);
 

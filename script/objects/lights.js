@@ -1,4 +1,10 @@
 //
+// objects/mesh.js
+// =========
+// A class for lighting & reflection parameters.
+//
+
+//
 // Point Light
 //
 
@@ -42,3 +48,19 @@ function SpotLightLocation(position, at, innerAngle, outerAngle, ambient, diffus
     this.specular = specular;
 }
 
+//
+// Material Reflection
+//
+
+function MaterialReflection(ambient, diffuse, specular, location) {
+    this.ambient = ambient;
+    this.diffuse = diffuse;
+    this.specular = specular;
+    this.location = location;   
+}
+
+function MaterialReflectionLocation(ambient, diffuse, specular) {
+    this.ambient = ambient;
+    this.diffuse = diffuse;
+    this.specular = specular;  
+}

@@ -1,5 +1,7 @@
 //
-// Vertices & Indices
+// init/mesh.js
+// =========
+// Contains global varaibles, and initialization for mesh vertices.
 //
 
 // Vertices and indices of ALL objects that will be drawn on screen.

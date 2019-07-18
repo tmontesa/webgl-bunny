@@ -1,3 +1,10 @@
+//
+// init/lighting.js
+// =========
+// Contains global varaibles, and initialization for point & spot lights,
+// and material reflection values.
+//
+
 // Global ambient.
 var ambientUniformLocation;
 var globalAmbient;
@@ -5,6 +12,9 @@ var globalAmbient;
 // Point & spotlight.
 var pointlight;
 var spotlight;
+
+// Material reflection.
+var matref;
 
 
 function init_lighting_global_ambient() {
@@ -18,14 +28,14 @@ function init_lighting_pointlight() {
     pointlight = new PointLight(
         vec4(5.0, 5.0, 0.0, 1.0),  // Position
         vec4(0.3, 0.3, 0.3, 1.0),   // Ambient
-        vec4(1.0, 1.0, 1.0, 1.0),   // Diffuse
+        vec4(0.6, 0.6, 0.6, 1.0),   // Diffuse
         vec4(1.0, 1.0, 1.0, 1.0),   // Specular
 
         new PointLightLocation(
-            gl.getUniformLocation(program, 'pointlight.position'),
-            gl.getUniformLocation(program, 'pointlight.ambient'),
-            gl.getUniformLocation(program, 'pointlight.diffuse'),
-            gl.getUniformLocation(program, 'pointlight.specular')
+            gl.getUniformLocation(program, 'p.position'),
+            gl.getUniformLocation(program, 'p.ambient'),
+            gl.getUniformLocation(program, 'p.diffuse'),
+            gl.getUniformLocation(program, 'p.specular')
         )
     );
     
@@ -42,18 +52,18 @@ function init_lighting_spotlight() {
         vec4(0.0, 0.0, 0.0, 1.0),   // (Looking) At
         radians(30.0),   // Inner Angle
         radians(40.0),   // Outer Angle
-        vec4(0.4, 0.4, 0.4, 1.0),   // Ambient
-        vec4(1.0, 1.0, 1.0, 1.0),   // Diffuse
+        vec4(0.5, 0.5, 0.5, 1.0),   // Ambient
+        vec4(0.9, 0.9, 0.9, 1.0),   // Diffuse
         vec4(1.0, 1.0, 1.0, 1.0),   // Specular
 
         new SpotLightLocation(
-            gl.getUniformLocation(program, 'spotlight.position'),
-            gl.getUniformLocation(program, 'spotlight.at'),
-            gl.getUniformLocation(program, 'spotlight.innerAngle'),
-            gl.getUniformLocation(program, 'spotlight.outerAngle'),
-            gl.getUniformLocation(program, 'spotlight.ambient'),
-            gl.getUniformLocation(program, 'spotlight.diffuse'),
-            gl.getUniformLocation(program, 'spotlight.specular')
+            gl.getUniformLocation(program, 's.position'),
+            gl.getUniformLocation(program, 's.at'),
+            gl.getUniformLocation(program, 's.innerAngle'),
+            gl.getUniformLocation(program, 's.outerAngle'),
+            gl.getUniformLocation(program, 's.ambient'),
+            gl.getUniformLocation(program, 's.diffuse'),
+            gl.getUniformLocation(program, 's.specular')
         )
     );
 
@@ -67,4 +77,27 @@ function init_lighting_spotlight() {
 
     SL_translate = translate(spotlight.position[0], spotlight.position[1], spotlight.position[2]);
     SL_translate_inverse = inverse(SL_translate);
+}
+
+function init_lighting_material_reflection() {
+
+    var aVal = 0.3;
+    var dVal = 0.4;
+    var sVal = 1.0;
+
+    matref = new MaterialReflection(
+        vec4(aVal, aVal, aVal, 1.0),
+        vec4(dVal, dVal, dVal, 1.0),
+        vec4(sVal, sVal, sVal, 1.0),
+
+        new MaterialReflectionLocation (
+            gl.getUniformLocation(program, 'matref.ambient'),
+            gl.getUniformLocation(program, 'matref.diffuse'),
+            gl.getUniformLocation(program, 'matref.specular')
+        )
+    );
+
+    gl.uniform4fv(matref.location.ambient,  new Float32Array(matref.ambient));
+    gl.uniform4fv(matref.location.diffuse,  new Float32Array(matref.diffuse));
+    gl.uniform4fv(matref.location.specular, new Float32Array(matref.specular));
 }

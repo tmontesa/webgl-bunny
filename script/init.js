@@ -26,27 +26,40 @@ function initialize() {
     gl.useProgram(program);
     
     //
-    // WebGL
+    // Lighting, reflection.
     //
 
- 
     init_lighting_global_ambient();
     init_lighting_pointlight();
     init_lighting_spotlight();
+    init_lighting_material_reflection(); 
+    
+    //
+    // Mesh vertices, faces, normals.
+    //
 
-    
-    
     init_vertices();
     init_indices();
     init_normals();
     init_cube_vertices();
     init_cone_vertices();
     
+    //
+    // Transformation matrices.
+    //
 
     init_transformations();
     init_light_transformations();
+
+    //
+    // Fragment color.
+    //
+
     init_color();
 
+    //
+    // Buffer objects.
+    //
     
     init_buffer_vertices();
     init_buffer_indices();

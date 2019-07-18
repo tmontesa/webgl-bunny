@@ -1,3 +1,10 @@
+//
+// init/transformations.js
+// =========
+// Contains global varaibles, and initialization for model-view matrix, projection matrix,
+// and model matrices for the point and spotlight transformations.
+//
+
 // Matrices for world, view, and projection, and their uniform locations in the shader. 
 // (Initially set to indentity.)
 var mWorldUniformLocation;
@@ -7,11 +14,11 @@ var mWorld = mat4();
 var mView = mat4();
 var mProj = mat4();
 
-var PL_mWorldUniformLocation;
-var PL_mWorld = mat4();
+var mWorldPUniformLocation;
+var mWorldP = mat4();
 
-var SL_mWorldUniformLocation;
-var SL_mWorld = mat4();
+var mWorldSUniformLocation;
+var mWorldS = mat4();
 
 function init_transformations() {
     // Get uniform matrices from vertex shader, and set initial values.
@@ -38,11 +45,9 @@ function init_transformations() {
 }
 
 function init_light_transformations() {
-    // Rotate light.
-    PL_mWorldUniformLocation = gl.getUniformLocation(program, 'PL_mWorld');
-    gl.uniformMatrix4fv(PL_mWorldUniformLocation, gl.FALSE, flatten(PL_mWorld));
+    mWorldPUniformLocation = gl.getUniformLocation(program, 'mWorldP');
+    gl.uniformMatrix4fv(mWorldPUniformLocation, gl.FALSE, flatten(mWorldP));
 
-    SL_mWorldUniformLocation = gl.getUniformLocation(program, 'SL_mWorld');
-    gl.uniformMatrix4fv(SL_mWorldUniformLocation, gl.FALSE, flatten(SL_mWorld));
-
+    mWorldSUniformLocation = gl.getUniformLocation(program, 'mWorldS');
+    gl.uniformMatrix4fv(mWorldSUniformLocation, gl.FALSE, flatten(mWorldS));
 }

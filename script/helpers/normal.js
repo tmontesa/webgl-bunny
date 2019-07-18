@@ -1,3 +1,9 @@
+//
+// helpers/normal.js
+// =========
+// Able to calculate face and vertex normals.
+//
+
 function calculate_face_normals(f, v) {
     var nf = new Array(f.length);
 

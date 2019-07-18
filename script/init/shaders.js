@@ -1,7 +1,7 @@
 //
-// init-shaders.js
+// init/shaders.js
 // =========
-// Functions needed to initialize shaders and import external files.
+// Contains global varaibles, and initialization for vertex & fragment shaders.
 //
 
 // Credit:

@@ -17,50 +17,49 @@ var SL_translate = mat4();
 var SL_translate_inverse = mat4();
 var SL_transform = mat4();
 var SL_rotcount_max = Math.round(180/SL_rot);
-var SL_rotcount = SL_rotcount_max;
+var SL_rotcount = SL_rotcount_max / 2;
 
 
 
 function game_render_model_world_translate() {
     if (bunny.translateX != 0 || bunny.translateY != 0 || bunny.translateZ != 0) {
         mTranslate = translate(bunny.translateX, bunny.translateY, bunny.translateZ);
-        mWorld = mult(mWorld, mTranslate);
+        mWorld = mult(mTranslate, mWorld);
     }
 }
 
 function game_render_model_world_rotate() {
      if (bunny.rotateY != 0) {
         mRotateY = rotate(bunny.rotateY, vec3(1.0, 0.0, 0.0));
-        mWorld = mult(mWorld, mRotateY);
+        mWorld = mult(mRotateY, mWorld);
     }
     
     if (bunny.rotateX != 0) {
         mRotateX = rotate(bunny.rotateX, vec3(0.0, 1.0, 0.0));
-        mWorld = mult(mWorld, mRotateX);
+        mWorld = mult(mRotateX, mWorld);
     }
 }
 
 function game_render_PL_world_rotate() {
-    if (!PLRotation) { return; }
-    PL_mWorld = mult(PL_mWorld, PL_mRotateX);
+    if (!PRotationToggle) { return; }
+    mWorldP = mult(PL_mRotateX, mWorldP);
 }
 
 function game_render_SL_world_rotate() {
     //if (!sLRotation) { return; }
     //console.log(SL_rotcount + " - " + SL_rot);
 
+    if (!SRotationToggle) { return; }
+
     if (SL_rotcount <= 0) {
         SL_rot *= -1;
         SL_mRotateZ = rotate(SL_rot, vec3(0.0, 0.0, 1.0));
         SL_rotcount = SL_rotcount_max;
-    }
-
-    SL_transform = mult(SL_translate_inverse, SL_mRotateZ);
-    SL_transform = mult(SL_translate, SL_transform);
-    SL_mWorld = mult(SL_transform, SL_mWorld);
-
+    } 
     SL_rotcount--;
     
+
+    mWorldS = mult(SL_translate, mult(SL_mRotateZ, mult(SL_translate_inverse, mWorldS)));
     
 }
 
@@ -78,8 +77,8 @@ function game_render() {
     gl.uniformMatrix4fv(mViewUniformLocation, gl.FALSE, flatten(mView));
     gl.uniformMatrix4fv(mProjUniformLocation, gl.FALSE, flatten(mProj));
 
-    gl.uniformMatrix4fv(PL_mWorldUniformLocation, gl.FALSE, flatten(PL_mWorld));
-    gl.uniformMatrix4fv(SL_mWorldUniformLocation, gl.FALSE, flatten(SL_mWorld));
+    gl.uniformMatrix4fv(mWorldPUniformLocation, gl.FALSE, flatten(mWorldP));
+    gl.uniformMatrix4fv(mWorldSUniformLocation, gl.FALSE, flatten(mWorldS));
 
     gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -119,7 +118,7 @@ function game_render() {
         0                           // Offset of the specific attribute
     );
     gl.enableVertexAttribArray(cubePositionAttribLocation);
-    gl.uniformMatrix4fv(mWorldUniformLocation, gl.FALSE, flatten(PL_mWorld));
+    gl.uniformMatrix4fv(mWorldUniformLocation, gl.FALSE, flatten(mWorldP));
 
     gl.uniform4fv(colorUniformLocation, new Float32Array(PLColor));
     gl.drawArrays(gl.LINES, 0, cube_vertices.length);
@@ -139,7 +138,7 @@ function game_render() {
         0                           // Offset of the specific attribute
     );
     gl.enableVertexAttribArray(conePositionAttribLocation);
-    gl.uniformMatrix4fv(mWorldUniformLocation, gl.FALSE, flatten(SL_mWorld));
+    gl.uniformMatrix4fv(mWorldUniformLocation, gl.FALSE, flatten(mWorldS));
 
     gl.uniform4fv(colorUniformLocation, new Float32Array(SLColor));
     gl.drawArrays(gl.LINES, 0, cone_vertices.length);

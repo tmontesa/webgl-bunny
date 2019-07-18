@@ -1,3 +1,9 @@
+//
+// objects/mesh.js
+// =========
+// A class for bunny parameters.
+//
+
 function Bunny() {
 	this.translateX = 0;
 	this.translateY = 0;

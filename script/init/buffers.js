@@ -1,5 +1,7 @@
 //
-// Buffer Objects
+// init/buffers.js
+// =========
+// Contains global varaibles, and initialization for WebGL buffer objects.
 //
 
 var VBO, IBO, NBO;
@@ -9,7 +11,6 @@ var positionAttribLocation, normalAttribLocation, cubePositionAttribLocation, co
 function init_buffer_vertices() {
     VBO = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, VBO);
-    console.log(vertices_sent.length + " at " + vertices_sent.length/3);
     gl.bufferData(gl.ARRAY_BUFFER, vertices_sent, gl.STATIC_DRAW);
 
     positionAttribLocation = gl.getAttribLocation(program, "vPosition");

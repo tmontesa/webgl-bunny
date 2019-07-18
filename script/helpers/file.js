@@ -1,3 +1,10 @@
+//
+// helpers/file.js
+// =========
+// Able to load files using AJAX.
+// Used for loading external shader files.
+//
+
 // Credit:
 // Taken from class files, initShader2.js.
 

@@ -1,5 +1,5 @@
 //
-// handlers.js
+// helpers/handlers.js
 // =========
 // Contains handler functions to track input events.
 // (Reused from my old project.)
@@ -29,7 +29,8 @@ var key = {
 	NUM_3:		false,
 	NUM_4:		false,
 	R:			false,
-	P:			false
+	P:			false,
+	S:			false
 };
 
 function handlerMousePosition(e) {
@@ -74,19 +75,15 @@ function handlerMouseUp(e) {
 function handlerKeyDown(e) {
 	switch(e.keyCode) {
 		case 37:
-		case 65:
 			key.LEFT	= true;
 			break;
 		case 38:
-		case 87:
 			key.UP 	    = true;
 			break;
 		case 39:
-		case 68:
 			key.RIGHT 	= true;
 			break;
 		case 40:
-		case 83:
             key.DOWN  	= true;
 			break;
 		case 32:
@@ -115,6 +112,9 @@ function handlerKeyDown(e) {
 		case 80:
 			key.P		= true;
 			break;
+		case 83:
+			key.S		= true;
+			break;
         default:
             break;
     }
@@ -123,19 +123,15 @@ function handlerKeyDown(e) {
 function handlerKeyUp(e) {
 	switch(e.keyCode) {
 		case 37:
-		case 65:
 			key.LEFT	= false;
 			break;
 		case 38:
-		case 87:
 			key.UP 	    = false;
 			break;
 		case 39:
-		case 68:
 			key.RIGHT 	= false;
 			break;
 		case 40:
-		case 83:
             key.DOWN  	= false;
 			break;
 		case 32:
@@ -163,6 +159,9 @@ function handlerKeyUp(e) {
 			break;
 		case 80:
 			key.P		= false;
+			break;
+		case 83:
+			key.S		= false;
 			break;
         default:
             break;
